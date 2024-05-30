@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Most comment station</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Most Comments Station</h1>
+    <div id="stations-list">
+        <!-- Stations will be rendered here -->
+    </div>
+    <div class="pagination">
+        <button id="prev-page" onclick="fetchStations(currentPage - 1)">Previous</button>
+        <span id="current-page">Page 1</span>
+        <button id="next-page" onclick="fetchStations(currentPage + 1)">Next</button>
+    </div>
+
+    <script>
+        let currentPage = 1;
+
+        async function fetchStations(page) {
+            if (page < 1) return;
+            const response = await fetch(`/comments/most-commented-stations-data/?page=${page}`);
+            const data = await response.json();
+            if (page > data.pages) return;
+            renderStations(data.stations);
+            currentPage = data.page;
+            document.getElementById('current-page').textContent = `Page ${currentPage}`;
+        }
+
+        function renderStations(stations) {
+            const stationsList = document.getElementById('stations-list');
+            stationsList.innerHTML = '';
+            stations.forEach(station => {
+                const stationItem = document.createElement('div');
+                stationItem.textContent = `${station.station_no} - ${station.station_name} (${station.comment_count} comments)`;
+                stationsList.appendChild(stationItem);
+            });
+        }
+
+        // Fetch the first page on load
+        fetchStations(currentPage);
+    </script>
+    </main>
+</body>
+</html>

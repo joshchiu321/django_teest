@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <title>Home</title>
+</head>
+ <style>
+           .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content div {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content div:hover {
+            background-color: #f1f1f1;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+    <script>
+          function filterFunction() {
+            var input, filter, div, i;
+            input = document.getElementById("station_search");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("stationDropdown").getElementsByTagName("div");
+            for (i = 0; i < div.length; i++) {
+                txtValue = div[i].textContent || div[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    div[i].style.display = "";
+                } else {
+                    div[i].style.display = "none";
+                }
+            }
+            document.getElementById("stationDropdown").classList.add("show");
+        }
+
+        function selectStation(station_no, station_name) {
+            document.getElementById("station_search").value = station_name;
+            document.getElementById("selected_station_no").value = station_no;
+            document.getElementById("stationDropdown").classList.remove("show");
+        }
+
+        function showDropdown() {
+            document.getElementById("stationDropdown").classList.toggle("show");
+        }
+
+        document.addEventListener("click", function(event) {
+            var dropdown = document.getElementById("stationDropdown");
+            if (!event.target.matches('#station_search')) {
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
+    </script>
+<body>
+     <h1>logout</h1>
+     <a href="{% url 'logout' %}">Logout</a>
+
+    <h1>Bike Stations with No Available Bikes</h1>
+    <ul id="stations-list"></ul>
+    <a href="{% url 'no-bikes' %}">No Bikes Stations</a>
+
+     <h1>Stations Sorted by Number of Comments</h1>
+     <ul id="most_comment_stations-list"></ul>
+     <a href="{% url 'most_commented_stations_page' %}">Most Comment Station</a>
+
+    <h1>Stations Sorted by Number of Comments</h1>
+    {% include "comments/sorted_stations.html" %}
+
+     <h1>Comment List</h1>
+     {% include "comments/comment_view.html" %}
+
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<form method="get" action="{% url 'home' %}">
+    <label for="station_search">Search Station:</label>
+    <input type="text" id="station_search" onkeyup="filterFunction()" onclick="showDropdown()" placeholder="Type to search a station">
+
+    <div id="stationDropdown" class="dropdown-content">
+        {% for station in stations %}
+            <div onclick="selectStation('{{ station.station_no }}', '{{ station.station_no }} - {{ station.station_name }}')">
+                {{ station.station_no }} - {{ station.station_name }}
+            </div>
+        {% empty %}
+            <div>No stations available</div>
+        {% endfor %}
+    </div>
+
+    <input type="hidden" name="station_no" id="selected_station_no" value="{% if selected_station %}{{ selected_station }}{% endif %}">
+    <button type="submit">Submit</button>
+</form>
+
+{% if comments %}
+    <h2>Comments for Station {{ selected_station }}</h2>
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <strong>{{ comment.username.username }}:</strong> {{ comment.comment }} <em>({{ comment.create_time }})</em>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    {% if selected_station %}
+        <p>No comments available for this station.</p>
+    {% endif %}
+{% endif %}

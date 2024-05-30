@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stations with No Bikes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Stations with No Bikes</h2>
+
+<table id="stationTable">
+    <thead>
+        <tr>
+            <th>Station Number</th>
+            <th>Station Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Table rows will be added dynamically using JavaScript -->
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchStationsWithNoBikes();
+    });
+
+    function fetchStationsWithNoBikes() {
+        fetch('/bikeStation/api/stations_with_no_bikes/')
+            .then(response => response.json())
+            .then(data => populateTable(data))
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    function populateTable(data) {
+        var tableBody = document.getElementById("stationTable").getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = ""; // Clear any existing rows
+        data.forEach((station, index) => {
+            var row = tableBody.insertRow(index);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = station.station_no;
+            cell2.innerHTML = station.station_name;
+        });
+    }
+</script>
+
+</body>
+</html>
