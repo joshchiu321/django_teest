@@ -86,12 +86,12 @@
      <ul id="most_comment_stations-list"></ul>
      <a href="{% url 'most_commented_stations_page' %}">Most Comment Station</a>
 
-    <h1>Stations Sorted by Number of Comments</h1>
-    {% include "comments/sorted_stations.html" %}
-
      <h1>Comment List</h1>
      {% include "comments/comment_view.html" %}
 
+    <h1>Stations Sorted by Number of Comments</h1>
+     <ul id="area_name_search_station"></ul>
+     <a href="{% url 'search_stations' %}">Filter area</a>
 
 </body>
 </html>

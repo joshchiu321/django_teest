@@ -25,17 +25,6 @@ def comment_view(request):
     return render(request, 'home.html', context)
 
 
-def sorted_stations_view(request):
-    stations = BikeStationInfo.objects.annotate(comment_count=Count('comment')).order_by('-comment_count')
-    paginator = Paginator(stations, 10)  # Show 10 stations per page
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'page_obj': page_obj,
-    }
-    return render(request, 'home.html', context)
 
 
 def most_commented_stations(request):

@@ -27,7 +27,7 @@
 
         async function fetchStations(page) {
             if (page < 1) return;
-            const response = await fetch(`/comments/most-commented-stations-data/?page=${page}`);
+            const response = await fetch(`/comments/data/most-commented-stations-data/?page=${page}`);
             const data = await response.json();
             if (page > data.pages) return;
             renderStations(data.stations);

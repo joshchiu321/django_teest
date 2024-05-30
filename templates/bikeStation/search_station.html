@@ -1,0 +1,23 @@
+
+<html>
+<head>
+    <title>Search Bike Stations</title>
+</head>
+<body>
+    <h1>Search Bike Stations</h1>
+    <form method="GET" action="{% url 'search_stations' %}">
+        <input type="text" name="q" placeholder="Enter station name or English name">
+        <input type="text" name="area" placeholder="Enter station area">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if stations %}
+        <h2>Search Results</h2>
+        <ul>
+            {% for station in stations %}
+                <li>{{ station.station_name }} ({{ station.station_name_en }}) - Area: {{ station.station_area }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

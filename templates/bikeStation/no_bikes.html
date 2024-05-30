@@ -39,7 +39,7 @@
     });
 
     function fetchStationsWithNoBikes() {
-        fetch('/bikeStation/api/stations_with_no_bikes/')
+        fetch('/bikeStation/data/stations_with_no_bikes_data/')
             .then(response => response.json())
             .then(data => populateTable(data))
             .catch(error => console.error('Error fetching data:', error));

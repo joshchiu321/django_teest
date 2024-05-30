@@ -12,8 +12,6 @@ class BikeStationInfo(models.Model):
     longitude = models.FloatField()
     act = models.CharField(max_length=1)
 
-    def __str__(self):
-        return self.station_name
 
 class BikeStationStatus(models.Model):
     station_no = models.ForeignKey(BikeStationInfo, on_delete=models.CASCADE)
@@ -26,5 +24,3 @@ class BikeStationStatus(models.Model):
     available_rent_bikes = models.IntegerField()
     available_return_bikes = models.IntegerField()
 
-    def __str__(self):
-        return f"{self.station_no} status on {self.infoDate}"

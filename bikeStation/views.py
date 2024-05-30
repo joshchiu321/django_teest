@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from .serializers import serializers
 from rest_framework import viewsets
-
+from django.db.models import Q
 class BikeStationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = BikeStationInfo.objects.all()
     serializer_class = serializers
@@ -23,3 +23,18 @@ def no_bikes_view(request):
     return render(request, 'bikeStation/no_bikes.html')
 
 
+def search_stations(request):
+    query = request.GET.get('q', '')
+    area = request.GET.get('area', '')
+    stations = []
+
+    if query or area:
+        filters = Q()
+        if query:
+            filters |= Q(station_name__icontains=query) | Q(station_name_en__icontains=query)
+        if area:
+            filters &= Q(station_area__icontains= area)
+
+        stations = BikeStationInfo.objects.filter(filters)
+
+    return render(request, 'bikeStation/search_station.html', {'stations': stations})
