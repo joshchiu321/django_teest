@@ -2,7 +2,7 @@
 1. A database schema that is suitable for recording the data that is provided with proper relationships and normalized form.In addition, a simple user management database schema, which allows a user to leave a comment about each YouBike site. 
     Database : sqllite <br />
         user management database : django.contrib.auth.models <br />
-![my_project_visualized](https://github.com/joshchiu321/vext_django/assets/89008806/f91248d6-8c21-4905-a622-db10dfadf3dd)
+![plot](./my_project_visualized.png)
 
 <pre/>
 
