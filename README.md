@@ -1,10 +1,11 @@
+<pre>
 1. A database schema that is suitable for recording the data that is provided with proper relationships and normalized form.
 In addition, a simple user management database schema, which allows a user to leave a comment about each YouBike site. <br />
 
-Database : sqllite <br />
-user management database : django.contrib.auth.models <br />
-other data base: <br />
-
+    Database : sqllite <br />
+        user management database : django.contrib.auth.models <br />
+        other data base: <br />
+<pre/>
 
 2. A script that scrapes and records this data into the database every minute. <br />
 
