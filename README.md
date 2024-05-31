@@ -1,34 +1,33 @@
 <pre>
-1. A database schema that is suitable for recording the data that is provided with proper relationships and normalized form.
-In addition, a simple user management database schema, which allows a user to leave a comment about each YouBike site. <br />
-
+1. A database schema that is suitable for recording the data that is provided with proper relationships and normalized form.In addition, a simple user management database schema, which allows a user to leave a comment about each YouBike site. 
     Database : sqllite <br />
         user management database : django.contrib.auth.models <br />
         other data base: <br />
 <pre/>
 
 2. A script that scrapes and records this data into the database every minute. <br />
-
     script : <br />
+    
         bikeStation/management/commands/fetch_bike_station_info.py <br />
         bikeStation/management/commands/fetch_bike_station_status.py <br />
-     <br />
     cmd: ( can build a cron job in django) <br />
         python manage.py fetch_bike_station_info 'https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json' <br />
         python manage.py fetch_bike_station_status 'https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json' <br />
  <br />
 3. A RESTful API that provides the following functions: <br />
-a. RESTful methods for user registration, login, and logout. <br />
+    a. RESTful methods for user registration, login, and logout. <br />
+    
   script : <br />
     users/urls.py <br />
-  
   path: <br />
     path('login/', login_view, name='login'), <br />
     path('register/', register_view, name='register'), <br />
     path('logout/', logout_view, name='logout'), <br />
  <br />
+    
 b. RESTful methods for users to add, update, delete comments about a YouBike <br />
 site.
+    
   script: <br />
     comments/urls.pyv
   path: <br />
@@ -36,7 +35,7 @@ site.
       path('add_comment/', add_comment, name='add_comment'), <br />
       path('edit/<int:comment_id>/', edit_comment, name='edit_comment'), <br />
       path('delete/<int:comment_id>/', delete_comment, name='delete_comment'), <br />
- <br />
+
 c. A GET method that returns sites sorted by sites with the most comments at the <br />
 top, with pagination. <br />
   script: <br />
