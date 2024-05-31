@@ -32,12 +32,14 @@ ALLOWED_HOSTS = [ 'localhost', '0.0.0.0','127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     'rest_framework',
     'users',
     'bikeStation',
@@ -156,4 +158,13 @@ LOGGING = {
             'handlers': ['console'],
         },
     },
+}
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
+
+GRAPH_MODELS = {
+  'app_labels': ["bikeStation", "comments", "auth"],
 }

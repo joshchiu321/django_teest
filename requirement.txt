@@ -1,3 +1,7 @@
 django
 djangorestframework
 faker
+pygraphviz
+pyparsing
+pydot
+django_extensions

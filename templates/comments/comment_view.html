@@ -1,32 +1,179 @@
-<form method="get" action="{% url 'home' %}">
-    <label for="station_search">Search Station:</label>
-    <input type="text" id="station_search" onkeyup="filterFunction()" onclick="showDropdown()" placeholder="Type to search a station">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search and Filter Bike Stations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 230px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .dropdown-content div {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+        }
+        .dropdown-content div:hover {
+            background-color: #ddd;
+        }
+        #station_search {
+            width: 230px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .comment-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .comment-item {
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .comment-item strong {
+            display: block;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        .comment-item em {
+            display: block;
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 5px;
+        }
+        .comment-form {
+            margin-top: 20px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+        .comment-form button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .comment-actions {
+            margin-top: 10px;
+        }
+        .comment-actions a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+        .comment-actions a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        function filterFunction() {
+            var input, filter, div, i, txtValue;
+            input = document.getElementById("station_search");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("stationDropdown").getElementsByTagName("div");
+            for (i = 0; i < div.length; i++) {
+                txtValue = div[i].textContent || div[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    div[i].style.display = "";
+                } else {
+                    div[i].style.display = "none";
+                }
+            }
+        }
 
-    <div id="stationDropdown" class="dropdown-content">
-        {% for station in stations %}
-            <div onclick="selectStation('{{ station.station_no }}', '{{ station.station_no }} - {{ station.station_name }}')">
-                {{ station.station_no }} - {{ station.station_name }}
-            </div>
-        {% empty %}
-            <div>No stations available</div>
-        {% endfor %}
-    </div>
+        function showDropdown() {
+            document.getElementById("stationDropdown").style.display = "block";
+        }
 
-    <input type="hidden" name="station_no" id="selected_station_no" value="{% if selected_station %}{{ selected_station }}{% endif %}">
-    <button type="submit">Submit</button>
-</form>
+        function selectStation(stationNo, stationText) {
+            document.getElementById("station_search").value = stationText;
+            document.getElementById("selected_station_no").value = stationNo;
+            document.getElementById("stationDropdown").style.display = "none";
+        }
 
-{% if comments %}
-    <h2>Comments for Station {{ selected_station }}</h2>
-    <ul>
-        {% for comment in comments %}
-            <li>
-                <strong>{{ comment.username.username }}:</strong> {{ comment.comment }} <em>({{ comment.create_time }})</em>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    {% if selected_station %}
-        <p>No comments available for this station.</p>
+        document.addEventListener('click', function(event) {
+            var isClickInside = document.getElementById("stationDropdown").contains(event.target) ||
+                                document.getElementById("station_search").contains(event.target);
+
+            if (!isClickInside) {
+                document.getElementById("stationDropdown").style.display = "none";
+            }
+        });
+    </script>
+</head>
+<body>
+    <form method="get" action="{% url 'comment_view' %}">
+        <label for="station_search">Search Station:</label>
+        <input type="text" id="station_search" onkeyup="filterFunction()" onclick="showDropdown()" placeholder="Type to search a station">
+
+        <div id="stationDropdown" class="dropdown-content">
+            {% for station in stations %}
+                <div onclick="selectStation('{{ station.station_no }}', '{{ station.station_no }} - {{ station.station_name }}')">
+                    {{ station.station_no }} - {{ station.station_name }}
+                </div>
+            {% empty %}
+                <div>No stations available</div>
+            {% endfor %}
+        </div>
+
+        <input type="hidden" name="station_no" id="selected_station_no" value="{% if selected_station %}{{ selected_station }}{% endif %}">
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if comments %}
+        <h2>Comments for Station {{ selected_station }}</h2>
+        <ul class="comment-list">
+            {% for comment in comments %}
+                <li class="comment-item">
+                    <strong>{{ comment.username }}:</strong>
+                    {{ comment.comment }}
+                    <em>({{ comment.create_time }})</em>
+                    {% if comment.user_id == request.user %}
+                        <div class="comment-actions">
+                            <a href="{% url 'edit_comment' comment.comment_id %}">Edit</a>
+                            <a href="{% url 'delete_comment' comment.comment_id %}" onclick="return confirm('Are you sure you want to delete this comment?');">Delete</a>
+                        </div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {% if selected_station %}
+            <p>No comments available for this station.</p>
+        {% endif %}
     {% endif %}
-{% endif %}
+
+    {% if selected_station %}
+        <div class="comment-form">
+            <h2>Add a Comment</h2>
+            <form method="post" action="{% url 'add_comment' %}">
+                {% csrf_token %}
+                <input type="hidden" name="station_no" value="{{ selected_station }}">
+                <textarea name="comment" placeholder="Enter your comment here"></textarea>
+                <button type="submit">Submit Comment</button>
+            </form>
+        </div>
+    {% endif %}
+</body>
+</html>

@@ -87,7 +87,9 @@
      <a href="{% url 'most_commented_stations_page' %}">Most Comment Station</a>
 
      <h1>Comment List</h1>
-     {% include "comments/comment_view.html" %}
+     <ul id="comment_list"></ul>
+     <a href="{% url 'comment_view' %}">List comment</a>
+
 
     <h1>Stations Sorted by Number of Comments</h1>
      <ul id="area_name_search_station"></ul>
